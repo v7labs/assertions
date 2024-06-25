@@ -261,8 +261,7 @@ defmodule Assertions do
       true
 
   """
-  @spec assert_map_in_list(map, [map], [any]) :: true | no_return
-  @spec assert_map_in_list(map, [map], comparison) :: true | no_return
+  @spec assert_map_in_list(map, [map], nonempty_list(any)) :: true | no_return
   defmacro assert_map_in_list(map, list, keys_or_comparison) do
     assertion =
       assertion(
@@ -282,13 +281,6 @@ defmodule Assertions do
           keys = unquote(stringify_list(keys_or_comparison))
           message = "Map matching the values for keys `#{keys}` not found"
           {Enum.member?(list, map), map, list, message}
-        else
-          comparison = keys_or_comparison
-          map = unquote(map)
-          list = unquote(list)
-          message = "Map not found in list using given comparison"
-
-          {Enum.any?(list, &comparison.(map, &1)), map, list, message}
         end
 
       if in_list? do
